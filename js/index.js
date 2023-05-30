@@ -1,23 +1,30 @@
 document.addEventListener('DOMContentLoaded', ()=> {
-    let form = document.querySelector('form');
+    const form = document.querySelector('form');
     const formContent = document.querySelector("#search");
+    // const value = formContent.value;
     form.addEventListener('submit', (event) => {
 event.preventDefault();
 searchReq(formContent.value);
+console.log(formContent.value);
     })
 
-function searchReq(request){
-    return fetch(`https://api.github.comsearch/users?q=${formContent.value}`,{
+function searchReq(formContent){
+    return fetch(`https://api.github.com/search/users?q=${formContent.value}`,{
         headers:{
             "Accept": "application/vnd.github.v3+json"
         }})
     
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data => data.items.forEach(renderOneSearchRes))
     }
 });
-// function renderOneSearchRes(response){
-//     let listItem = document.createElement("li");
-//     listItem.innerHTML =
-// }
-// });
+function renderOneSearchRes(data){
+    console.log(data);
+    let listItem = document.createElement("li");
+    let list = document.getElementById('user-list');
+    listItem.innerHTML =`
+    <h4 class="user"> User : ${data.login} </h4>
+    <p class="id"> ID: ${data.id} </p>`;
+    list.append(listItem);
+
+}
