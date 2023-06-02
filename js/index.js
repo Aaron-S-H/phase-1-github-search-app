@@ -4,19 +4,24 @@ document.addEventListener('DOMContentLoaded', ()=> {
     // const value = formContent.value;
     form.addEventListener('submit', (event) => {
 event.preventDefault();
-searchReq(formContent.value);
-console.log(formContent.value);
+searchReq(formContent);
+console.log(formContent);
     })
 
 function searchReq(formContent){
+    
     return fetch(`https://api.github.com/search/users?q=${formContent.value}`,{
         headers:{
             "Accept": "application/vnd.github.v3+json"
         }})
     
     .then(res => res.json())
-    .then(data => data.items.forEach(renderOneSearchRes))
+    .then(data => {
+        let list = document.getElementById('user-list');
+        list.innerHTML = "";
+        data.items.forEach(renderOneSearchRes)});
     }
+    
 });
 function renderOneSearchRes(data){
     console.log(data);
